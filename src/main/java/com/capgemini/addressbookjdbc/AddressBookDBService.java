@@ -1,11 +1,13 @@
 package com.capgemini.addressbookjdbc;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +63,9 @@ public class AddressBookDBService {
 				int zipcode = result.getInt("zip");
 				String phone = result.getString("phone_number");
 				String email = result.getString("email");
+				LocalDate start_date = result.getDate("start_date").toLocalDate();
 				addressBookList
-						.add(new AddressBookData(id, firstName, lastName, address, city, state, zipcode, phone, email));
+						.add(new AddressBookData(id, firstName, lastName, address, city, state, zipcode, phone, email, start_date));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -110,6 +113,24 @@ public class AddressBookDBService {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	
+	public List<AddressBookData> getAddressBookForDateRange(LocalDate startDate, LocalDate endDate) {
+		String sql = String.format("SELECT * FROM contact_details WHERE start_date BETWEEN '%s' AND '%s'", Date.valueOf(startDate), Date.valueOf(endDate));
+		return this.getAddressBookDataUSingDB(sql);
+	}
+
+	private List<AddressBookData> getAddressBookDataUSingDB(String sql) {
+		List<AddressBookData> addBookList = new ArrayList<>();
+		try(Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			addBookList = this.getAddressBookData(result);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return addBookList;
 	}
 
 }
