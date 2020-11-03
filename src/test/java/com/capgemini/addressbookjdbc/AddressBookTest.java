@@ -2,6 +2,7 @@ package com.capgemini.addressbookjdbc;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,6 +31,22 @@ public class AddressBookTest {
     	LocalDate endDate = LocalDate.now();
     	List<AddressBookData> addBookData = addBookService.readAddressBookForDateRange(IOService.DB_IO, startDate, endDate);
     	Assert.assertEquals(4, addBookData.size());
+    }
+	
+	@Test
+	public void givenContactsData_WhenCountByCity_ShouldReturnProperValue() {
+    	AddressBookService addBookService = new AddressBookService();
+    	addBookService.readAddresBookData(IOService.DB_IO);
+    	Map<String, Integer> countContactsByCity = addBookService.readCountContactsByCity(IOService.DB_IO);
+    	Assert.assertTrue(countContactsByCity.get("Prayagraj").equals(2) && countContactsByCity.get("delhi").equals(1) && countContactsByCity.get("Ahmedabad").equals(1));
+    }
+	
+	@Test
+	public void givenContactsData_WhenCountByState_ShouldReturnProperValue() {
+    	AddressBookService addBookService = new AddressBookService();
+    	addBookService.readAddresBookData(IOService.DB_IO);
+    	Map<String, Integer> countContactsByState = addBookService.readCountContactsByState(IOService.DB_IO);
+    	Assert.assertTrue(countContactsByState.get("Uttar Pradesh").equals(2) && countContactsByState.get("Gujrat").equals(1) && countContactsByState.get("new delhi").equals(1));
     }
 
 }

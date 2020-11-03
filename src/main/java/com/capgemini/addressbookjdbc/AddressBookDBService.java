@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.capgemini.addressbookdata.*;
 
@@ -133,4 +135,39 @@ public class AddressBookDBService {
 		return addBookList;
 	}
 
+	public Map<String, Integer> getCountByCity() {
+		String sql = "SELECT city, COUNT(city) AS City_Count from contact_details group by city;";
+		Map<String, Integer> countByCity = new HashMap<String, Integer>();
+		try {
+			Connection connection = getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				String city = result.getString("city");
+				int count = result.getInt("City_Count");
+				countByCity.put(city, count);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return countByCity;
+	}
+
+	public Map<String, Integer> getCountByState() {
+		String sql = "SELECT state, COUNT(state) AS State_Count from contact_details group by state;";
+		Map<String, Integer> countByState = new HashMap<String, Integer>();
+		try {
+			Connection connection = getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				String city = result.getString("state");
+				int count = result.getInt("State_Count");
+				countByState.put(city, count);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return countByState;
+	}
 }
