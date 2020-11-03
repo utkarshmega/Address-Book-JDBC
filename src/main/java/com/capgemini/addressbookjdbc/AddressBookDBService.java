@@ -66,8 +66,8 @@ public class AddressBookDBService {
 				String phone = result.getString("phone_number");
 				String email = result.getString("email");
 				LocalDate start_date = result.getDate("start_date").toLocalDate();
-				addressBookList
-						.add(new AddressBookData(id, firstName, lastName, address, city, state, zipcode, phone, email, start_date));
+				addressBookList.add(new AddressBookData(id, firstName, lastName, address, city, state, zipcode, phone,
+						email, start_date));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -105,8 +105,8 @@ public class AddressBookDBService {
 	}
 
 	private int updateAddressBookUsingStatement(String oldFirstName, String newFirstName) {
-		String sql = String.format("update contact_details set first_name = '%s' where first_name = '%s';", newFirstName,
-				oldFirstName);
+		String sql = String.format("update contact_details set first_name = '%s' where first_name = '%s';",
+				newFirstName, oldFirstName);
 		try {
 			Connection connection = getConnection();
 			Statement statement = connection.createStatement();
@@ -116,20 +116,20 @@ public class AddressBookDBService {
 		}
 		return 0;
 	}
-	
+
 	public List<AddressBookData> getAddressBookForDateRange(LocalDate startDate, LocalDate endDate) {
-		String sql = String.format("SELECT * FROM contact_details WHERE start_date BETWEEN '%s' AND '%s'", Date.valueOf(startDate), Date.valueOf(endDate));
+		String sql = String.format("SELECT * FROM contact_details WHERE start_date BETWEEN '%s' AND '%s'",
+				Date.valueOf(startDate), Date.valueOf(endDate));
 		return this.getAddressBookDataUSingDB(sql);
 	}
 
 	private List<AddressBookData> getAddressBookDataUSingDB(String sql) {
 		List<AddressBookData> addBookList = new ArrayList<>();
-		try(Connection connection = this.getConnection()) {
+		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
 			addBookList = this.getAddressBookData(result);
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return addBookList;
@@ -142,12 +142,12 @@ public class AddressBookDBService {
 			Connection connection = getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
-			while(result.next()) {
+			while (result.next()) {
 				String city = result.getString("city");
 				int count = result.getInt("City_Count");
 				countByCity.put(city, count);
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return countByCity;
@@ -160,14 +160,36 @@ public class AddressBookDBService {
 			Connection connection = getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
-			while(result.next()) {
+			while (result.next()) {
 				String city = result.getString("state");
 				int count = result.getInt("State_Count");
 				countByState.put(city, count);
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return countByState;
+	}
+
+	public AddressBookData addnewContactToDB(int id, String firstName, String lastName, String address, String city, String state, int zip,
+			String phone, String email, LocalDate start) {
+		AddressBookData addBookData = null;
+		String sql = String.format(
+				"Insert into contact_details(first_name, last_name, address, city, state, zip, phone_number, email, start_date) values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+				firstName, lastName, address, city, state, zip, phone, email, start);
+		try(Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+			if(rowAffected == 1) {
+				ResultSet result = statement.getGeneratedKeys();
+				if(result.next())	
+					firstName = result.getString("first_name");
+			}
+			addBookData = new AddressBookData(id, firstName, lastName, address, city, state, zip, phone, email, start);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return addBookData;
 	}
 }
