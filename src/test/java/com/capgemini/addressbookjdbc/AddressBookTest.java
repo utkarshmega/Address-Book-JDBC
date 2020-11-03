@@ -16,6 +16,9 @@ public class AddressBookTest {
 		AddressBookService addBookService = new AddressBookService();
 		List<AddressBookData> addBookData = addBookService.readAddresBookData(IOService.DB_IO);
     	Assert.assertEquals(4, addBookData.size());
+    	addBookService.updateFirstName("Prasant", "Prashant");
+    	AddressBookData contact = addBookService.checkAddressBookInSync("Prashant");
+    	Assert.assertEquals("Prashant", contact.first_name);
     }
 
 }
