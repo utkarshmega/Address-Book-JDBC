@@ -16,7 +16,8 @@ import java.util.Map;
 import com.capgemini.addressbookdata.*;
 
 public class AddressBookDBService {
-
+	
+	private int connectionCounter = 0;
 	private static AddressBookDBService addBookDB;
 	private PreparedStatement preparedStatement;
 
@@ -31,11 +32,14 @@ public class AddressBookDBService {
 	}
 
 	private Connection getConnection() throws SQLException {
+		connectionCounter++;
 		String jdbcURL = "jdbc:mysql://localhost:3306/address_book_service?useSSL=false";
-		String username = "root";
+		String username = "root"; 
 		String password = "sqldatabase@1252";
 		Connection connection;
+		System.out.println("Processing Thread: " + Thread.currentThread().getName() + " Connecting to Database ID: " + connectionCounter);
 		connection = DriverManager.getConnection(jdbcURL, username, password);
+		System.out.println("Processing Thread: " + Thread.currentThread().getName() + " Connecting to Database ID: " + connectionCounter + " Connection is established!!");
 		return connection;
 	}
 
