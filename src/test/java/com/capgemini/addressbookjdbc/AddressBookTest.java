@@ -1,6 +1,9 @@
 package com.capgemini.addressbookjdbc;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,5 +60,23 @@ public class AddressBookTest {
     	AddressBookData contact = addBookService.checkAddressBookInSync("Shivangi");
     	Assert.assertEquals("shivangi@gmail.com", contact.email);
     }
+	
+	@Test
+	public void given3Contacts_ShouldMatchCount() {
+		
+		List<AddressBookData> addContactList = new ArrayList<>();
+		addContactList.add(new AddressBookData(4, "Shivangi", "Srivastava", "Lukerganj", "Kolkata", "West Bengal", 700055, "9191919191", "shivangi@gmail.com", LocalDate.of(2020, 11, 03)));
+		addContactList.add(new AddressBookData(5, "Shikhar", "Agrawl", "Ashok Nagar", "Prayagraj", "Uttar Padesh", 211002, "9151236987", "shikhar@gmail.com", LocalDate.of(2017, 04, 30)));
+		addContactList.add(new AddressBookData(6, "Jugnu", "Singhal", "Tonk", "Jaipur", "Rajasthan", 122012, "9898521425", "jugnu@gmail.com", LocalDate.of(2019, 06, 26)));
+		AddressBookService addBookService = new AddressBookService();
+		addBookService.readAddresBookData(IOService.DB_IO);
+		Instant startTime = Instant.now();
+		addBookService.addContactUsingThread(addContactList);
+		Instant endTime = Instant.now();
+		System.out.println("Duration with thread : " + Duration.between(startTime, endTime));
+    	List<AddressBookData> addressBookData = addBookService.readAddresBookData(IOService.DB_IO);
+    	System.out.println(addressBookData.size());
+    	Assert.assertEquals(7, addressBookData.size());
+	}
 
 }
