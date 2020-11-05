@@ -18,9 +18,9 @@ public class AddressBookTest {
 		AddressBookService addBookService = new AddressBookService();
 		List<AddressBookData> addBookData = addBookService.readAddresBookData(IOService.DB_IO);
     	Assert.assertEquals(4, addBookData.size());
-    	addBookService.updateFirstName("Prasant", "Prashant");
-    	AddressBookData contact = addBookService.checkAddressBookInSync("Prashant");
-    	Assert.assertEquals("Prashant", contact.first_name);
+    	addBookService.updateFirstName("Prasant", "Prashant", IOService.DB_IO);
+    	boolean resultContact = addBookService.checkAddressBookInSync("Prashant");
+    	Assert.assertTrue(resultContact);
     }
 	
 	@Test 
@@ -54,8 +54,8 @@ public class AddressBookTest {
     	AddressBookService addBookService = new AddressBookService();
     	addBookService.readAddresBookData(IOService.DB_IO);
     	addBookService.addNewContact(4, "Shivangi", "Srivastava", "Lukerganj", "Kolkata", "West Bengal", 700055, "9191919191", "shivangi@gmail.com", LocalDate.of(2020, 11, 03));
-    	AddressBookData contact = addBookService.checkAddressBookInSync("Shivangi");
-    	Assert.assertEquals("shivangi@gmail.com", contact.email);
+    	boolean resultContact = addBookService.checkAddressBookInSync("Shivangi");
+    	Assert.assertTrue(resultContact);
     }
 
 }
