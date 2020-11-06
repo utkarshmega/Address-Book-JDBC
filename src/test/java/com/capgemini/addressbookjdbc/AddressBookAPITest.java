@@ -81,7 +81,7 @@ public class AddressBookAPITest {
 		long entries = addBookService.noOfEntries(AddressBookService.IOService.REST_IO);
 		assertEquals(5, entries);
 	}
-
+	//UC24
 	@Test
 	public void givenFirstName_WhenUpdated_ShouldReturn200Response() {
 		AddressBookData[] arrOfCon = getContactList();
