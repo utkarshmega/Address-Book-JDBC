@@ -35,7 +35,7 @@ public class AddressBookAPITest {
 		RequestSpecification request = RestAssured.given();
 		request.header("Content-Type", "application/json");
 		request.body(conJson);
-		return request.post("/contacts");
+		return request.post("/contacts"); 
 	}
 
 	private Response updateContactToJSONServer(AddressBookData addressBookData) {
@@ -62,7 +62,7 @@ public class AddressBookAPITest {
 		long entries = addBookService.noOfEntries(AddressBookService.IOService.REST_IO);
 		assertEquals(4, entries);
 	}
-
+	//UC23
 	@Test
 	public void givenNewContact_WhenAdded_ShouldReturn201ResponseAndCount() {
 		AddressBookData[] arrOfCon = getContactList();
