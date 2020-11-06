@@ -95,7 +95,7 @@ public class AddressBookAPITest {
 		int statusCode = response.getStatusCode();
 		assertEquals(200, statusCode);
 	}
-
+	//UC25
 	@Test
 	public void givenContactToDelete_WhenDeleted_ShouldReturn200ResponseAndCount() {
 		AddressBookData[] arrOfCon = getContactList();
