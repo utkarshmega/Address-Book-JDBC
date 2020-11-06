@@ -83,7 +83,7 @@ public class AddressBookAPITest {
 	}
 
 	@Test
-	public void givenCity_WhenUpdated_ShouldReturn200Response() {
+	public void givenFirstName_WhenUpdated_ShouldReturn200Response() {
 		AddressBookData[] arrOfCon = getContactList();
 		AddressBookService addBookService;
 		addBookService = new AddressBookService(Arrays.asList(arrOfCon));
